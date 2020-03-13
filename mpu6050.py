@@ -1,11 +1,12 @@
 import machine
+from machine import I2C
 from time import sleep,sleep_ms
 class accel():
     error=[0,0,0]
     def __init__(self, i2c, addr=0x68):
         self.iic = i2c
         self.addr = addr
-        self.iic.start()
+        #self.iic.init()
         sleep_ms(1)
         self.iic.writeto(self.addr, bytearray([107, 0]))
         sleep_ms(1)
@@ -17,12 +18,12 @@ class accel():
         sleep_ms(1)
         self.iic.writeto_mem(self.addr,0x1c,b'\x08') #acceler 4g ,8192lsb.g
         sleep_ms(1)
-        self.iic.stop()
+        #self.iic.deinit()
 
     def get_raw_values(self):
-        self.iic.start()
+        #self.iic.init()
         a = self.iic.readfrom_mem(self.addr, 0x3B, 14)
-        self.iic.stop()
+        #self.iic.deinit()
         return a
 
     def get_ints(self):
